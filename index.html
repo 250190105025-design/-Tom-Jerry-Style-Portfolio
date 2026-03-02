@@ -1,0 +1,1479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jerry.dev — Portfolio 🐭</title>
+<link href="https://fonts.googleapis.com/css2?family=Titan+One&family=Fredoka+One&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold:    #F5C842;
+  --gold-d:  #D4A017;
+  --brown:   #8B4513;
+  --brown-l: #C4893A;
+  --cream:   #FFF8E7;
+  --red:     #E8341A;
+  --red-l:   #FF6B4A;
+  --blue:    #2E86AB;
+  --blue-l:  #5BB8DB;
+  --green:   #4CAF50;
+  --green-l: #76D275;
+  --gray:    #6B6B6B;
+  --gray-l:  #9E9E9E;
+  --white:   #FFFEF5;
+  --black:   #1A1A1A;
+  --outline: 3px solid var(--black);
+  --shadow:  5px 5px 0 var(--black);
+  --shadow-l:3px 3px 0 var(--black);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--cream);
+  font-family: 'Nunito', sans-serif;
+  color: var(--black);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ── CARTOON TEXTURE BG ── */
+body::before {
+  content:'';
+  position: fixed; inset:0; z-index:0; pointer-events:none;
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(245,200,66,.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(232,52,26,.06) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(46,134,171,.05) 0%, transparent 60%);
+}
+
+/* ── HALFTONE DOTS ── */
+.halftone {
+  position: fixed; inset:0; pointer-events:none; z-index:0; opacity:.04;
+  background-image: radial-gradient(circle, #000 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* ── CUSTOM CURSOR ── */
+#tom-cursor {
+  position: fixed; pointer-events:none; z-index:9999;
+  width:40px; height:40px;
+  transform: translate(-50%,-50%);
+  transition: transform .1s;
+  filter: drop-shadow(2px 2px 0 rgba(0,0,0,.4));
+}
+#tom-cursor.grabbing { transform: translate(-50%,-50%) scale(1.3) rotate(-20deg); }
+
+/* ── CHEESE TRAIL ── */
+.cheese-particle {
+  position:fixed; pointer-events:none; z-index:9998;
+  font-size:1.2rem;
+  animation: cheeseFloat 1.2s ease-out forwards;
+}
+@keyframes cheeseFloat {
+  0%   { opacity:1; transform: translateY(0) rotate(0deg) scale(1); }
+  100% { opacity:0; transform: translateY(-60px) rotate(30deg) scale(.3); }
+}
+
+/* ── TOAST / SPEECH BUBBLE ── */
+#speech-bubble {
+  position: fixed; bottom:30px; left:50%;
+  transform: translateX(-50%) translateY(120px);
+  background: white; border: var(--outline);
+  border-radius: 20px; padding:14px 28px;
+  font-family: 'Fredoka One', cursive;
+  font-size:1.1rem; box-shadow: var(--shadow);
+  z-index:9000;
+  transition: transform .35s cubic-bezier(.34,1.56,.64,1);
+  white-space: nowrap;
+}
+#speech-bubble::after {
+  content:'';
+  position:absolute; bottom:-18px; left:50%; transform:translateX(-50%);
+  border:9px solid transparent; border-top-color: var(--black);
+}
+#speech-bubble::before {
+  content:'';
+  position:absolute; bottom:-12px; left:50%; transform:translateX(-50%);
+  border:8px solid transparent; border-top-color: white; z-index:1;
+}
+#speech-bubble.show { transform: translateX(-50%) translateY(0); }
+
+/* ── BANG EFFECT ── */
+.bang {
+  position:fixed; pointer-events:none; z-index:9990;
+  font-family:'Titan One', cursive;
+  font-size:3rem; color:var(--red);
+  -webkit-text-stroke:3px var(--black);
+  animation: bangPop .5s cubic-bezier(.34,1.56,.64,1) forwards;
+  transform-origin: center;
+}
+@keyframes bangPop {
+  0%   { transform:scale(0) rotate(-15deg); opacity:1; }
+  60%  { transform:scale(1.3) rotate(5deg); opacity:1; }
+  100% { transform:scale(1.1) rotate(0deg); opacity:0; }
+}
+
+/* ── STARS (dizzy) ── */
+.dizzy-stars {
+  position:fixed; pointer-events:none; z-index:9991;
+  animation: dizzyOrbit 1s linear forwards;
+}
+@keyframes dizzyOrbit {
+  0%   { opacity:1; transform:rotate(0deg) translateX(30px) rotate(0deg); }
+  100% { opacity:0; transform:rotate(360deg) translateX(30px) rotate(-360deg); }
+}
+
+/* ═══════════ NAV ═══════════ */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:500;
+  background: var(--gold);
+  border-bottom: 4px solid var(--black);
+  padding:0 50px;
+  display:flex; justify-content:space-between; align-items:stretch;
+  box-shadow: 0 4px 0 var(--black);
+}
+
+.nav-logo {
+  font-family:'Titan One', cursive;
+  font-size:1.8rem; letter-spacing:2px;
+  color:var(--black);
+  display:flex; align-items:center; gap:10px;
+  padding:14px 0;
+}
+.nav-logo .logo-icon {
+  width:42px; height:42px;
+  background:var(--brown-l); border:3px solid var(--black);
+  border-radius:50%; display:flex; align-items:center; justify-content:center;
+  font-size:1.3rem;
+  animation: headBob 1.2s ease-in-out infinite;
+}
+@keyframes headBob {
+  0%,100%{ transform:translateY(0) rotate(0deg); }
+  50%    { transform:translateY(-4px) rotate(3deg); }
+}
+
+.nav-links { display:flex; gap:0; }
+.nav-link {
+  font-family:'Fredoka One',cursive;
+  font-size:.95rem; color:var(--black);
+  text-decoration:none;
+  padding:0 20px;
+  display:flex; align-items:center;
+  border-left:3px solid var(--black);
+  transition:background .15s;
+  position:relative; overflow:hidden;
+}
+.nav-link::after {
+  content:'';
+  position:absolute; bottom:0; left:0; right:0; height:0;
+  background:var(--red); transition:height .2s; z-index:-1;
+}
+.nav-link:hover { color:white; }
+.nav-link:hover::after { height:100%; }
+.nav-link.active { background:var(--red); color:white; }
+
+/* ═══════════ HERO ═══════════ */
+.hero {
+  min-height:100vh;
+  display:flex; align-items:center; justify-content:center;
+  padding:100px 60px 60px;
+  position:relative; z-index:2; gap:40px; flex-wrap:wrap;
+  overflow:hidden;
+}
+
+/* Animated floor */
+.hero::after {
+  content:'';
+  position:absolute; bottom:0; left:0; right:0;
+  height:80px;
+  background: repeating-linear-gradient(90deg, #C4893A 0px, #C4893A 60px, #8B4513 60px, #8B4513 120px);
+  border-top:4px solid var(--black);
+  z-index:1;
+}
+
+/* Running chase scene */
+.chase-scene {
+  position:absolute; bottom:80px; left:0; right:0;
+  height:80px; z-index:5; pointer-events:none; overflow:hidden;
+}
+
+.runner {
+  position:absolute; bottom:5px;
+  font-size:2.4rem;
+  animation: runAcross 8s linear infinite;
+  filter: drop-shadow(2px 2px 0 rgba(0,0,0,.3));
+}
+.runner.jerry { animation-duration:8s; }
+.runner.tom    { animation-duration:8.6s; font-size:2.8rem; }
+
+@keyframes runAcross {
+  0%   { left:-80px; transform:scaleX(1); }
+  49%  { left:110%; transform:scaleX(1); }
+  50%  { left:110%; transform:scaleX(-1); }
+  99%  { left:-80px; transform:scaleX(-1); }
+  100% { left:-80px; transform:scaleX(1); }
+}
+
+/* Puff clouds on run */
+.puff { position:absolute; bottom:8px; font-size:1.4rem; opacity:.5; }
+
+.hero-left { flex:1; min-width:280px; max-width:560px; position:relative; z-index:3; }
+
+/* Comic book title box */
+.title-box {
+  background: var(--gold);
+  border:5px solid var(--black);
+  border-radius:16px;
+  padding:8px 20px;
+  display:inline-block;
+  box-shadow: var(--shadow);
+  transform:rotate(-1.5deg);
+  margin-bottom:20px;
+  font-family:'Fredoka One',cursive;
+  font-size:.95rem; letter-spacing:2px;
+  text-transform:uppercase;
+}
+
+.hero-name {
+  font-family:'Titan One',cursive;
+  font-size:clamp(3.5rem,9vw,7rem);
+  line-height:.95; letter-spacing:2px;
+  position:relative;
+}
+.hero-name .line1 {
+  display:block;
+  color:var(--cream);
+  -webkit-text-stroke:4px var(--black);
+  text-shadow: 6px 6px 0 var(--brown), 7px 7px 0 var(--black);
+  animation: titleWobble 3s ease-in-out infinite;
+}
+.hero-name .line2 {
+  display:block;
+  color:var(--red);
+  -webkit-text-stroke:4px var(--black);
+  text-shadow: 6px 6px 0 #a01000, 7px 7px 0 var(--black);
+}
+@keyframes titleWobble {
+  0%,100%{ transform:skewX(0); }
+  30%{ transform:skewX(-2deg); }
+  70%{ transform:skewX(2deg); }
+}
+
+.hero-role {
+  font-family:'Fredoka One',cursive;
+  font-size:1.3rem;
+  margin:16px 0 14px;
+  display:flex; gap:8px; flex-wrap:wrap; align-items:center;
+}
+.role-chip {
+  background:var(--blue); color:white;
+  border:3px solid var(--black);
+  border-radius:8px; padding:4px 14px;
+  box-shadow: var(--shadow-l);
+  transition:transform .2s cubic-bezier(.34,1.56,.64,1);
+  cursor:default;
+}
+.role-chip:hover { transform:rotate(-5deg) scale(1.1); }
+.role-chip.red   { background:var(--red); }
+.role-chip.green { background:var(--green); }
+
+.hero-desc {
+  font-size:1.05rem; line-height:1.75; color:#3a2a10;
+  background:white; border:3px solid var(--black);
+  border-radius:12px; padding:16px 20px;
+  box-shadow: var(--shadow-l);
+  margin-bottom:30px;
+  position:relative;
+}
+.hero-desc::before {
+  content:'💬'; position:absolute; top:-16px; left:16px;
+  font-size:1.4rem;
+}
+
+.hero-btns { display:flex; gap:16px; flex-wrap:wrap; }
+
+.btn {
+  font-family:'Fredoka One',cursive; font-size:1.1rem;
+  border:4px solid var(--black); border-radius:12px;
+  padding:14px 32px; cursor:pointer;
+  text-decoration:none; display:inline-block;
+  box-shadow: var(--shadow);
+  transition:all .15s cubic-bezier(.34,1.56,.64,1);
+  position:relative; overflow:hidden;
+}
+.btn:hover  { transform:translate(-3px,-3px); box-shadow:8px 8px 0 var(--black); }
+.btn:active { transform:translate(3px,3px);  box-shadow:2px 2px 0 var(--black); }
+
+.btn-red   { background:var(--red);   color:white; }
+.btn-gold  { background:var(--gold);  color:var(--black); }
+.btn-blue  { background:var(--blue);  color:white; }
+.btn-green { background:var(--green); color:white; }
+
+/* Hero Character Stage */
+.hero-right {
+  flex-shrink:0; position:relative; z-index:3;
+  width:380px; height:460px;
+}
+
+/* Frying pan decoration */
+.frying-pan {
+  position:absolute; top:-20px; right:-10px;
+  font-size:3rem; z-index:10;
+  animation:panSwing 2s ease-in-out infinite;
+  transform-origin: top right;
+  cursor:pointer;
+  filter: drop-shadow(2px 2px 0 rgba(0,0,0,.3));
+}
+@keyframes panSwing {
+  0%,100%{ transform:rotate(-10deg); }
+  50%    { transform:rotate(15deg); }
+}
+.frying-pan:hover { animation: panWhack .3s ease; }
+@keyframes panWhack {
+  0%  { transform:rotate(-10deg); }
+  30% { transform:rotate(-40deg); }
+  60% { transform:rotate(30deg); }
+  100%{ transform:rotate(-10deg); }
+}
+
+/* Cheese wheel */
+.cheese-wheel {
+  position:absolute; bottom:100px; right:-30px;
+  cursor:pointer; z-index:10;
+  animation:cheeseBounce 2.5s ease-in-out infinite;
+  filter:drop-shadow(3px 3px 0 rgba(0,0,0,.3));
+}
+@keyframes cheeseBounce {
+  0%,100%{ transform:translateY(0) rotate(0deg); }
+  50%    { transform:translateY(-15px) rotate(10deg); }
+}
+.cheese-wheel:hover { animation:cheeseSpin .4s linear; }
+@keyframes cheeseSpin {
+  to{ transform:rotate(360deg); }
+}
+
+/* Tom character SVG card */
+.char-stage {
+  width:100%; height:100%;
+  background:var(--blue-l);
+  border:5px solid var(--black);
+  border-radius:20px;
+  box-shadow: var(--shadow);
+  overflow:hidden; position:relative;
+  display:flex; align-items:flex-end; justify-content:center;
+}
+.char-stage::before {
+  content:'';
+  position:absolute; bottom:0; left:0; right:0; height:100px;
+  background:var(--gold);
+  border-top:4px solid var(--black);
+}
+/* Polka dot wallpaper */
+.char-stage::after {
+  content:'';
+  position:absolute; inset:0;
+  background-image: radial-gradient(circle, rgba(255,255,255,.15) 3px, transparent 3px);
+  background-size:28px 28px;
+  pointer-events:none;
+}
+
+.char-inner {
+  position:relative; z-index:5;
+  animation:charBob 2s ease-in-out infinite;
+}
+@keyframes charBob {
+  0%,100%{ transform:translateY(0) rotate(0deg); }
+  50%    { transform:translateY(-10px) rotate(1deg); }
+}
+
+/* ═══════════ STATS BAR ═══════════ */
+.stats-bar {
+  position:relative; z-index:2;
+  background:var(--brown);
+  border-top:4px solid var(--black);
+  border-bottom:4px solid var(--black);
+  display:flex; justify-content:space-around; flex-wrap:wrap;
+  padding:24px 40px; gap:20px;
+}
+.stat-item { text-align:center; }
+.stat-num {
+  font-family:'Titan One',cursive;
+  font-size:3.2rem; color:var(--gold);
+  -webkit-text-stroke:2px var(--black);
+  text-shadow:4px 4px 0 var(--black);
+  display:block; line-height:1;
+}
+.stat-label { color:rgba(255,248,231,.8); font-weight:800; font-size:.8rem; letter-spacing:2px; text-transform:uppercase; margin-top:4px; }
+
+/* ═══════════ MARQUEE ═══════════ */
+.marquee-wrap {
+  overflow:hidden; position:relative; z-index:2;
+  background:var(--red); padding:10px 0;
+  border-top:3px solid var(--black); border-bottom:3px solid var(--black);
+}
+.marquee-inner {
+  display:flex; width:max-content;
+  animation:marquee 20s linear infinite;
+}
+.m-item {
+  font-family:'Fredoka One',cursive; font-size:1rem;
+  color:white; white-space:nowrap;
+  padding:0 30px; display:flex; align-items:center; gap:12px;
+}
+.m-item::after { content:'★'; color:var(--gold); font-size:.8rem; }
+@keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+/* ═══════════ SECTION BASE ═══════════ */
+section { position:relative; z-index:2; padding:90px 50px; }
+
+.section-eyebrow {
+  font-family:'Fredoka One',cursive;
+  font-size:.85rem; letter-spacing:3px; text-transform:uppercase;
+  background:var(--gold); color:var(--black);
+  border:3px solid var(--black); border-radius:6px;
+  display:inline-block; padding:4px 14px;
+  box-shadow:var(--shadow-l); margin-bottom:14px;
+  transform:rotate(-1deg);
+}
+.section-title {
+  font-family:'Titan One',cursive;
+  font-size:clamp(2.4rem,5vw,4rem);
+  color:var(--black); letter-spacing:1px;
+  line-height:1.05; margin-bottom:10px;
+}
+.section-title .red  { color:var(--red); -webkit-text-stroke:2px var(--black); text-shadow:4px 4px 0 #a01000,5px 5px 0 var(--black); }
+.section-title .blue { color:var(--blue); -webkit-text-stroke:2px var(--black); text-shadow:4px 4px 0 #1a5570,5px 5px 0 var(--black); }
+.section-subtitle { font-size:1rem; color:var(--gray); max-width:500px; margin:0 auto 60px; line-height:1.7; }
+.section-header { text-align:center; }
+
+/* ═══════════ SKILLS ═══════════ */
+.skills-bg { background:var(--cream); }
+
+.skills-grid {
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px,1fr));
+  gap:24px; max-width:1100px; margin:0 auto;
+}
+
+.skill-card {
+  background:white;
+  border:4px solid var(--black);
+  border-radius:16px;
+  padding:28px 26px;
+  box-shadow: var(--shadow);
+  position:relative; cursor:pointer; overflow:hidden;
+  transition:transform .2s cubic-bezier(.34,1.56,.64,1), box-shadow .2s;
+}
+.skill-card:hover { transform:translate(-4px,-6px) rotate(-1.5deg); box-shadow:9px 11px 0 var(--black); }
+.skill-card:active { transform:translate(2px,2px); box-shadow:3px 3px 0 var(--black); }
+
+/* Diagonal color stripe top */
+.skill-card::before {
+  content:'';
+  position:absolute; top:0; left:0; right:0; height:8px;
+  border-radius:12px 12px 0 0;
+}
+.sk-red::before    { background:var(--red); }
+.sk-blue::before   { background:var(--blue); }
+.sk-green::before  { background:var(--green); }
+.sk-gold::before   { background:var(--gold); }
+.sk-brown::before  { background:var(--brown-l); }
+.sk-gray::before   { background:var(--gray); }
+
+/* Corner star */
+.skill-card::after {
+  content:'★';
+  position:absolute; top:12px; right:14px;
+  font-size:1.2rem; color:var(--gold);
+  -webkit-text-stroke:1px var(--black);
+  opacity:0; transition:opacity .2s, transform .2s;
+  transform:rotate(-20deg) scale(.5);
+}
+.skill-card:hover::after { opacity:1; transform:rotate(0deg) scale(1); }
+
+.skill-icon {
+  width:58px; height:58px; border-radius:50%;
+  border:3px solid var(--black);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.7rem; margin-bottom:14px;
+  box-shadow:var(--shadow-l);
+}
+.sk-red   .skill-icon { background:var(--red-l); }
+.sk-blue  .skill-icon { background:var(--blue-l); }
+.sk-green .skill-icon { background:var(--green-l); }
+.sk-gold  .skill-icon { background:var(--gold); }
+.sk-brown .skill-icon { background:var(--brown-l); }
+.sk-gray  .skill-icon { background:#ccc; }
+
+.skill-name {
+  font-family:'Fredoka One',cursive; font-size:1.2rem; margin-bottom:7px;
+}
+.skill-desc { font-size:.88rem; color:var(--gray); line-height:1.55; margin-bottom:16px; }
+
+.skill-bar-bg { height:12px; background:#eee; border:2.5px solid var(--black); border-radius:6px; overflow:hidden; }
+.skill-bar-fg {
+  height:100%; border-radius:4px;
+  width:0; transition:width 1.3s cubic-bezier(.25,.46,.45,.94);
+}
+.sk-red   .skill-bar-fg { background:var(--red); }
+.sk-blue  .skill-bar-fg { background:var(--blue); }
+.sk-green .skill-bar-fg { background:var(--green); }
+.sk-gold  .skill-bar-fg { background:var(--gold-d); }
+.sk-brown .skill-bar-fg { background:var(--brown-l); }
+.sk-gray  .skill-bar-fg { background:var(--gray); }
+
+.skill-pct { font-family:'Fredoka One',cursive; font-size:.9rem; color:var(--gray); text-align:right; margin-top:4px; }
+
+/* Ripple */
+.ripple {
+  position:absolute; border-radius:50%;
+  background:rgba(245,200,66,.45); pointer-events:none;
+  transform:scale(0); animation:rippleOut .6s linear;
+}
+@keyframes rippleOut { to{ transform:scale(4); opacity:0; } }
+
+/* ═══════════ PROJECTS ═══════════ */
+.projects-bg { background: repeating-linear-gradient(0deg, var(--cream) 0px, var(--cream) 38px, rgba(245,200,66,.08) 38px, rgba(245,200,66,.08) 40px); }
+
+.projects-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(330px,1fr));
+  gap:28px; max-width:1100px; margin:0 auto;
+}
+
+.project-card {
+  background:white;
+  border:4px solid var(--black);
+  border-radius:18px; overflow:hidden;
+  box-shadow:var(--shadow);
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1), box-shadow .25s;
+  cursor:pointer; position:relative;
+}
+.project-card:hover { transform:translate(-4px,-8px) rotate(1.5deg); box-shadow:9px 13px 0 var(--black); }
+
+.proj-thumb {
+  height:180px; position:relative;
+  display:flex; align-items:center; justify-content:center;
+  font-size:4.5rem; overflow:hidden;
+  border-bottom:4px solid var(--black);
+}
+.proj-thumb-icon { position:relative; z-index:1; animation:iconBounce 1.8s ease-in-out infinite; }
+@keyframes iconBounce {
+  0%,100%{ transform:translateY(0) rotate(-5deg); }
+  50%    { transform:translateY(-12px) rotate(5deg); }
+}
+
+/* Corner ribbon */
+.proj-ribbon {
+  position:absolute; top:14px; left:-6px;
+  background:var(--red); color:white;
+  font-family:'Fredoka One',cursive; font-size:.75rem;
+  padding:4px 14px 4px 10px; border:2px solid var(--black);
+  border-radius:0 6px 6px 0;
+  box-shadow:var(--shadow-l);
+}
+
+.proj-like {
+  position:absolute; top:14px; right:14px;
+  width:38px; height:38px;
+  background:white; border:3px solid var(--black);
+  border-radius:50%; font-size:1rem;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; transition:all .2s cubic-bezier(.34,1.56,.64,1);
+  box-shadow:var(--shadow-l); z-index:10;
+}
+.proj-like:hover { transform:scale(1.25) rotate(-10deg); }
+.proj-like.liked { background:var(--red-l); border-color:var(--red); animation:heartSmash .35s ease; }
+@keyframes heartSmash {
+  0%  { transform:scale(1); }
+  40% { transform:scale(1.5) rotate(-5deg); }
+  100%{ transform:scale(1); }
+}
+
+.proj-body { padding:22px; }
+.proj-tags { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px; }
+.ptag {
+  font-family:'Fredoka One',cursive; font-size:.75rem;
+  padding:3px 10px; border:2.5px solid var(--black);
+  border-radius:6px; box-shadow:2px 2px 0 var(--black);
+}
+.t-red   { background:var(--red-l);   color:var(--black); }
+.t-blue  { background:var(--blue-l);  color:var(--black); }
+.t-green { background:var(--green-l); color:var(--black); }
+.t-gold  { background:var(--gold);    color:var(--black); }
+.t-gray  { background:#ddd;           color:var(--black); }
+
+.proj-title { font-family:'Fredoka One',cursive; font-size:1.3rem; margin-bottom:7px; }
+.proj-desc  { font-size:.88rem; color:var(--gray); line-height:1.6; margin-bottom:18px; }
+.proj-footer { display:flex; justify-content:space-between; align-items:center; }
+.proj-stars  { font-family:'Fredoka One',cursive; color:var(--gold-d); font-size:.9rem; }
+
+.proj-btn {
+  font-family:'Fredoka One',cursive; font-size:.85rem;
+  background:var(--gold); color:var(--black);
+  border:3px solid var(--black); border-radius:8px;
+  padding:7px 16px; cursor:pointer;
+  box-shadow:var(--shadow-l); text-decoration:none;
+  display:inline-block;
+  transition:all .15s cubic-bezier(.34,1.56,.64,1);
+}
+.proj-btn:hover { transform:translate(-2px,-2px); box-shadow:5px 5px 0 var(--black); background:var(--red); color:white; }
+
+/* ═══════════ EXPERIENCE ═══════════ */
+.exp-bg { background:#FFF3E0; }
+
+.timeline { max-width:780px; margin:0 auto; position:relative; }
+.timeline::before {
+  content:'';
+  position:absolute; left:40px; top:0; bottom:0;
+  width:5px; background:repeating-linear-gradient(to bottom, var(--brown) 0px, var(--brown) 10px, var(--gold) 10px, var(--gold) 20px);
+  border-radius:3px;
+}
+
+.tl-item {
+  display:flex; gap:28px; margin-bottom:44px;
+  opacity:0; transform:translateX(-24px);
+  transition:opacity .5s ease, transform .5s ease;
+}
+.tl-item.visible { opacity:1; transform:translateX(0); }
+
+.tl-dot {
+  width:80px; height:80px; flex-shrink:0;
+  border:4px solid var(--black); border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:2rem; box-shadow:var(--shadow);
+  cursor:pointer; position:relative; z-index:1;
+  transition:transform .2s cubic-bezier(.34,1.56,.64,1);
+}
+.tl-dot:hover { transform:scale(1.15) rotate(-10deg); }
+.tl-dot.d-gold  { background:var(--gold); }
+.tl-dot.d-red   { background:var(--red-l); }
+.tl-dot.d-blue  { background:var(--blue-l); }
+.tl-dot.d-green { background:var(--green-l); }
+
+.tl-card {
+  flex:1; background:white;
+  border:4px solid var(--black); border-radius:14px;
+  padding:22px 24px; box-shadow:var(--shadow);
+  transition:transform .2s;
+}
+.tl-card:hover { transform:translateX(6px); }
+
+.tl-period { font-family:'Fredoka One',cursive; font-size:.82rem; letter-spacing:2px; text-transform:uppercase; color:var(--red); margin-bottom:5px; }
+.tl-role   { font-family:'Fredoka One',cursive; font-size:1.25rem; margin-bottom:4px; }
+.tl-company{ color:var(--blue); font-weight:800; font-size:.95rem; margin-bottom:10px; }
+.tl-desc   { font-size:.88rem; color:var(--gray); line-height:1.65; }
+
+/* ═══════════ CONTACT ═══════════ */
+.contact-bg {
+  background:var(--gold);
+  border-top:4px solid var(--black);
+}
+.contact-inner {
+  max-width:720px; margin:0 auto; text-align:center;
+}
+.contact-title {
+  font-family:'Titan One',cursive;
+  font-size:clamp(2.2rem,5vw,3.8rem);
+  line-height:1.1; margin-bottom:16px;
+  color:var(--black);
+  text-shadow:4px 4px 0 var(--brown-l), 5px 5px 0 var(--black);
+}
+.contact-subtitle { font-size:1.05rem; color:#3a2a10; margin-bottom:40px; line-height:1.7; }
+
+.contact-links { display:flex; gap:14px; flex-wrap:wrap; justify-content:center; margin-bottom:40px; }
+.contact-link {
+  font-family:'Fredoka One',cursive; font-size:.95rem;
+  background:white; color:var(--black);
+  border:4px solid var(--black); border-radius:12px;
+  padding:12px 22px; text-decoration:none;
+  box-shadow:var(--shadow); display:flex; align-items:center; gap:8px;
+  transition:all .15s cubic-bezier(.34,1.56,.64,1);
+}
+.contact-link:hover { transform:translate(-3px,-4px); box-shadow:8px 9px 0 var(--black); background:var(--red); color:white; }
+
+/* ─── Mini GAME ─── */
+.mini-game-box {
+  background:white; border:4px solid var(--black);
+  border-radius:16px; padding:28px;
+  box-shadow:var(--shadow); max-width:540px; margin:0 auto;
+}
+.mg-title {
+  font-family:'Fredoka One',cursive; font-size:1.15rem;
+  margin-bottom:6px; color:var(--black);
+}
+.mg-sub { font-size:.85rem; color:var(--gray); margin-bottom:20px; }
+
+.mg-scene {
+  position:relative; height:120px;
+  background:linear-gradient(to bottom, #87CEEB 0%, #87CEEB 65%, #8B6914 65%, #A07A20 100%);
+  border:3px solid var(--black); border-radius:10px;
+  overflow:hidden; cursor:crosshair; margin-bottom:16px;
+}
+/* Grass */
+.mg-scene::after {
+  content:'🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿';
+  position:absolute; bottom:30px; left:0;
+  font-size:1rem; white-space:nowrap;
+  animation:grassScroll 3s linear infinite;
+}
+@keyframes grassScroll { 0%{transform:translateX(0)} 100%{transform:translateX(-80px)} }
+
+.mg-jerry {
+  position:absolute; bottom:38px; font-size:2rem;
+  cursor:pointer; user-select:none; z-index:10;
+  transition:left .05s; animation:jerryRun 0.3s steps(2) infinite;
+}
+@keyframes jerryRun {
+  0%  { transform:scaleX(1) translateY(0); }
+  50% { transform:scaleX(1) translateY(-4px); }
+  100%{ transform:scaleX(1) translateY(0); }
+}
+
+.mg-cheese {
+  position:absolute; bottom:38px; font-size:1.6rem;
+  cursor:pointer; z-index:10;
+  animation:cheeseWiggle 1s ease-in-out infinite;
+}
+@keyframes cheeseWiggle {
+  0%,100%{ transform:rotate(-8deg); }
+  50%    { transform:rotate(8deg) scale(1.1); }
+}
+
+.mg-score-row { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; }
+.mg-score {
+  font-family:'Titan One',cursive; font-size:1.8rem; color:var(--red);
+  -webkit-text-stroke:1.5px var(--black);
+}
+.mg-rank { font-family:'Fredoka One',cursive; font-size:1rem; color:var(--blue); }
+.mg-btn  {
+  font-family:'Fredoka One',cursive; font-size:.9rem;
+  background:var(--red); color:white;
+  border:3px solid var(--black); border-radius:8px;
+  padding:8px 18px; cursor:pointer; box-shadow:var(--shadow-l);
+  transition:all .15s;
+}
+.mg-btn:hover { transform:translate(-2px,-2px); box-shadow:5px 5px 0 var(--black); }
+
+/* ═══════════ FOOTER ═══════════ */
+footer {
+  position:relative; z-index:2;
+  background:var(--brown); color:var(--gold);
+  text-align:center; padding:22px;
+  border-top:4px solid var(--black);
+  font-family:'Fredoka One',cursive; font-size:.95rem;
+}
+
+/* Scroll top */
+#scrollTop {
+  position:fixed; bottom:30px; right:30px; z-index:500;
+  width:52px; height:52px;
+  background:var(--red); color:white;
+  border:4px solid var(--black); border-radius:50%;
+  font-size:1.3rem; cursor:pointer;
+  box-shadow:var(--shadow);
+  opacity:0; pointer-events:none;
+  transition:all .2s cubic-bezier(.34,1.56,.64,1);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Fredoka One',cursive;
+}
+#scrollTop.vis { opacity:1; pointer-events:all; }
+#scrollTop:hover { transform:translate(-2px,-4px); box-shadow:7px 9px 0 var(--black); }
+
+/* ─── REVEAL ─── */
+.reveal { opacity:0; transform:translateY(24px); transition:opacity .55s ease,transform .55s ease; }
+.reveal.visible { opacity:1; transform:translateY(0); }
+
+@media(max-width:768px){
+  nav { padding:0 16px; }
+  .nav-links { display:none; }
+  section { padding:60px 20px; }
+  .hero { padding:90px 20px 80px; }
+  .hero-right { display:none; }
+  .chase-scene { display:none; }
+}
+</style>
+</head>
+<body>
+
+<!-- Halftone -->
+<div class="halftone"></div>
+
+<!-- Cursor (Tom's paw) -->
+<div id="tom-cursor">
+  <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="20" cy="26" rx="14" ry="12" fill="#888" stroke="#222" stroke-width="2.5"/>
+    <ellipse cx="9"  cy="15" rx="6"  ry="7"  fill="#888" stroke="#222" stroke-width="2"/>
+    <ellipse cx="20" cy="12" rx="6"  ry="7"  fill="#888" stroke="#222" stroke-width="2"/>
+    <ellipse cx="31" cy="15" rx="6"  ry="7"  fill="#888" stroke="#222" stroke-width="2"/>
+    <ellipse cx="20" cy="27" rx="8"  ry="6"  fill="#ffb3b3" stroke="#222" stroke-width="1.5"/>
+    <circle cx="12" cy="25" r="3.5" fill="#ffb3b3" stroke="#222" stroke-width="1.5"/>
+    <circle cx="28" cy="25" r="3.5" fill="#ffb3b3" stroke="#222" stroke-width="1.5"/>
+    <circle cx="20" cy="33" r="3.5" fill="#ffb3b3" stroke="#222" stroke-width="1.5"/>
+  </svg>
+</div>
+
+<!-- Speech bubble -->
+<div id="speech-bubble">🐭 Hehe!</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-icon logo-icon">🐭</div>
+    Jerry.dev
+  </div>
+  <div class="nav-links">
+    <a class="nav-link active" href="#about">🏠 About</a>
+    <a class="nav-link" href="#skills">⚡ Skills</a>
+    <a class="nav-link" href="#projects">🧀 Projects</a>
+    <a class="nav-link" href="#experience">📜 History</a>
+    <a class="nav-link" href="#contact">💌 Contact</a>
+  </div>
+</nav>
+
+<!-- ════ HERO ════ -->
+<section class="hero" id="about">
+
+  <!-- Chase scene -->
+  <div class="chase-scene">
+    <div class="runner jerry" style="animation-delay:0s">🐭</div>
+    <div class="runner tom"   style="animation-delay:.6s">🐱</div>
+    <span class="puff" style="left:15%">💨</span>
+    <span class="puff" style="left:40%">💨</span>
+    <span class="puff" style="left:70%">💨</span>
+  </div>
+
+  <div class="hero-left">
+    <div class="title-box">✦ Full-Stack Developer ✦ Available Now!</div>
+
+    <h1 class="hero-name">
+      <span class="line1">JERRY</span>
+      <span class="line2">MOUSE</span>
+    </h1>
+
+    <p class="hero-role">
+      <span class="role-chip">OpenSwoole</span>
+      <span class="role-chip red">React / Next</span>
+      <span class="role-chip green">Golang</span>
+    </p>
+
+    <div class="hero-desc">
+      Hi! I'm a <strong>backend speed demon</strong> who outsmarts every bottleneck — just like a certain little mouse 🐭 I build real-time systems with <strong>OpenSwoole</strong>, blazing APIs, and UIs so slick Tom can't catch 'em!
+    </div>
+
+    <div class="hero-btns">
+      <a href="#projects" class="btn btn-red"   id="heroWork">🧀 See My Work</a>
+      <a href="#contact"  class="btn btn-gold"  id="heroHi">💌 Say Hello!</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="char-stage">
+      <!-- Jerry SVG character -->
+      <div class="char-inner">
+        <svg viewBox="0 0 260 320" fill="none" xmlns="http://www.w3.org/2000/svg" width="240">
+          <!-- Shadow -->
+          <ellipse cx="130" cy="308" rx="60" ry="10" fill="rgba(0,0,0,.2)"/>
+
+          <!-- Body -->
+          <ellipse cx="130" cy="220" rx="55" ry="70" fill="#C4893A" stroke="#1A1A1A" stroke-width="3"/>
+          <!-- Belly -->
+          <ellipse cx="130" cy="230" rx="32" ry="45" fill="#E8C49A" stroke="#1A1A1A" stroke-width="2"/>
+
+          <!-- Legs -->
+          <ellipse cx="105" cy="282" rx="22" ry="14" fill="#C4893A" stroke="#1A1A1A" stroke-width="3"/>
+          <ellipse cx="155" cy="282" rx="22" ry="14" fill="#C4893A" stroke="#1A1A1A" stroke-width="3"/>
+          <!-- Feet -->
+          <ellipse cx="99"  cy="293" rx="26" ry="12" fill="#8B4513" stroke="#1A1A1A" stroke-width="2.5"/>
+          <ellipse cx="161" cy="293" rx="26" ry="12" fill="#8B4513" stroke="#1A1A1A" stroke-width="2.5"/>
+
+          <!-- Arms -->
+          <path d="M80 200 Q48 210 40 240" stroke="#C4893A" stroke-width="22" stroke-linecap="round"/>
+          <path d="M180 200 Q212 210 220 240" stroke="#C4893A" stroke-width="22" stroke-linecap="round"/>
+          <!-- Hands -->
+          <ellipse cx="38"  cy="245" rx="16" ry="13" fill="#C4893A" stroke="#1A1A1A" stroke-width="2.5"/>
+          <ellipse cx="222" cy="245" rx="16" ry="13" fill="#C4893A" stroke="#1A1A1A" stroke-width="2.5"/>
+          <!-- Fingers L -->
+          <circle cx="26"  cy="238" r="7" fill="#C4893A" stroke="#1A1A1A" stroke-width="2"/>
+          <circle cx="24"  cy="250" r="7" fill="#C4893A" stroke="#1A1A1A" stroke-width="2"/>
+          <circle cx="34"  cy="257" r="7" fill="#C4893A" stroke="#1A1A1A" stroke-width="2"/>
+          <!-- Fingers R -->
+          <circle cx="234" cy="238" r="7" fill="#C4893A" stroke="#1A1A1A" stroke-width="2"/>
+          <circle cx="236" cy="250" r="7" fill="#C4893A" stroke="#1A1A1A" stroke-width="2"/>
+          <circle cx="226" cy="257" r="7" fill="#C4893A" stroke="#1A1A1A" stroke-width="2"/>
+
+          <!-- Holding cheese (right) -->
+          <polygon points="218,216 242,216 230,238" fill="#F5C842" stroke="#1A1A1A" stroke-width="2"/>
+          <circle cx="224" cy="224" r="3" fill="#E8A800"/>
+          <circle cx="234" cy="220" r="2.5" fill="#E8A800"/>
+          <circle cx="229" cy="232" r="2" fill="#E8A800"/>
+
+          <!-- Tail -->
+          <path d="M185 270 Q230 260 240 230 Q250 200 220 190" stroke="#C4893A" stroke-width="9" fill="none" stroke-linecap="round"/>
+
+          <!-- Neck -->
+          <rect x="116" y="138" width="28" height="35" rx="14" fill="#C4893A" stroke="#1A1A1A" stroke-width="2.5"/>
+
+          <!-- Head -->
+          <ellipse cx="130" cy="108" rx="72" ry="76" fill="#C4893A" stroke="#1A1A1A" stroke-width="3.5"/>
+
+          <!-- Ears -->
+          <ellipse cx="68"  cy="60" rx="30" ry="34" fill="#C4893A" stroke="#1A1A1A" stroke-width="3"/>
+          <ellipse cx="192" cy="60" rx="30" ry="34" fill="#C4893A" stroke="#1A1A1A" stroke-width="3"/>
+          <!-- Inner ears -->
+          <ellipse cx="68"  cy="62" rx="18" ry="22" fill="#E8A080" stroke="#1A1A1A" stroke-width="1.5"/>
+          <ellipse cx="192" cy="62" rx="18" ry="22" fill="#E8A080" stroke="#1A1A1A" stroke-width="1.5"/>
+
+          <!-- Muzzle -->
+          <ellipse cx="130" cy="124" rx="32" ry="24" fill="#E8C49A" stroke="#1A1A1A" stroke-width="2.5"/>
+
+          <!-- Eyes -->
+          <ellipse cx="106" cy="100" rx="18" ry="20" fill="white" stroke="#1A1A1A" stroke-width="3"/>
+          <ellipse cx="154" cy="100" rx="18" ry="20" fill="white" stroke="#1A1A1A" stroke-width="3"/>
+          <!-- Pupils -->
+          <circle cx="109" cy="103" r="11" fill="#1A1A1A"/>
+          <circle cx="157" cy="103" r="11" fill="#1A1A1A"/>
+          <!-- Iris shine -->
+          <circle cx="104" cy="97"  r="5"  fill="white"/>
+          <circle cx="152" cy="97"  r="5"  fill="white"/>
+          <circle cx="113" cy="108" r="2.5" fill="white" opacity=".6"/>
+          <circle cx="161" cy="108" r="2.5" fill="white" opacity=".6"/>
+
+          <!-- Eyebrows -->
+          <path d="M90 82 Q106 72 118 80"  stroke="#1A1A1A" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+          <path d="M142 80 Q154 72 170 82" stroke="#1A1A1A" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+
+          <!-- Nose -->
+          <ellipse cx="130" cy="118" rx="8" ry="5.5" fill="#E87070" stroke="#1A1A1A" stroke-width="2"/>
+
+          <!-- Mouth smile -->
+          <path id="jerryMouth" d="M112 130 Q130 144 148 130" stroke="#1A1A1A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+          <!-- Whiskers -->
+          <line x1="100" y1="124" x2="56"  y2="118" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round"/>
+          <line x1="100" y1="128" x2="56"  y2="130" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round"/>
+          <line x1="100" y1="132" x2="58"  y2="142" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round"/>
+          <line x1="160" y1="124" x2="204" y2="118" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round"/>
+          <line x1="160" y1="128" x2="204" y2="130" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round"/>
+          <line x1="160" y1="132" x2="202" y2="142" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round"/>
+
+          <!-- Sparkles -->
+          <text x="22" y="140" font-size="16" opacity=".7">✦</text>
+          <text x="222" y="160" font-size="12" opacity=".6">★</text>
+          <text x="30" y="200" font-size="10" opacity=".5">✦</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Frying pan -->
+    <div class="frying-pan" id="panBtn" title="Bonk!">🍳</div>
+    <!-- Cheese -->
+    <div class="cheese-wheel" id="cheeseBtn" title="Grab cheese!">🧀</div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-inner" id="marquee"></div>
+</div>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat-item"><span class="stat-num" data-target="47">0</span><div class="stat-label">Projects Shipped</div></div>
+  <div class="stat-item"><span class="stat-num" data-target="6">0</span><div class="stat-label">Years of XP</div></div>
+  <div class="stat-item"><span class="stat-num" data-target="1200000">0</span><div class="stat-label">Requests / Day</div></div>
+  <div class="stat-item"><span class="stat-num" data-target="99">0</span><div class="stat-label">% Uptime SLA</div></div>
+  <div class="stat-item"><span class="stat-num" data-target="0">0</span><div class="stat-label">Times Caught by Tom</div></div>
+</div>
+
+<!-- SKILLS -->
+<section id="skills" class="skills-bg">
+  <div class="section-header reveal">
+    <div class="section-eyebrow">⚡ Abilities</div>
+    <h2 class="section-title">My <span class="red">Skill</span> Toolkit</h2>
+    <p class="section-subtitle">Click any card — Tom won't like what happens 🍳</p>
+  </div>
+
+  <div class="skills-grid">
+    <div class="skill-card sk-red reveal" data-bang="POW!">
+      <div class="skill-icon">⚡</div>
+      <div class="skill-name">OpenSwoole / Swoole</div>
+      <div class="skill-desc">High-perf async PHP runtime. WebSocket servers, coroutines, 50k+ concurrent connections at scale.</div>
+      <div class="skill-bar-bg"><div class="skill-bar-fg" data-w="94"></div></div>
+      <div class="skill-pct">94%</div>
+    </div>
+    <div class="skill-card sk-blue reveal" data-bang="ZAP!">
+      <div class="skill-icon">⚛️</div>
+      <div class="skill-name">React / Next.js</div>
+      <div class="skill-desc">SSR, ISR, App Router, server components — UIs faster than Jerry running from Tom.</div>
+      <div class="skill-bar-bg"><div class="skill-bar-fg" data-w="90"></div></div>
+      <div class="skill-pct">90%</div>
+    </div>
+    <div class="skill-card sk-green reveal" data-bang="BOOM!">
+      <div class="skill-icon">🐳</div>
+      <div class="skill-name">Docker / Kubernetes</div>
+      <div class="skill-desc">Container orchestration, Helm charts, GitOps pipelines. Deploy like you're setting a mousetrap.</div>
+      <div class="skill-bar-bg"><div class="skill-bar-fg" data-w="85"></div></div>
+      <div class="skill-pct">85%</div>
+    </div>
+    <div class="skill-card sk-gold reveal" data-bang="WHAM!">
+      <div class="skill-icon">🗄️</div>
+      <div class="skill-name">Redis & Databases</div>
+      <div class="skill-desc">MySQL, PostgreSQL, Redis pub/sub, caching layers and connection pooling magic.</div>
+      <div class="skill-bar-bg"><div class="skill-bar-fg" data-w="88"></div></div>
+      <div class="skill-pct">88%</div>
+    </div>
+    <div class="skill-card sk-brown reveal" data-bang="CRACK!">
+      <div class="skill-icon">🔗</div>
+      <div class="skill-name">REST & GraphQL</div>
+      <div class="skill-desc">API-first design, rate limiting, OAuth2, JWT, versioning for public-facing services.</div>
+      <div class="skill-bar-bg"><div class="skill-bar-fg" data-w="92"></div></div>
+      <div class="skill-pct">92%</div>
+    </div>
+    <div class="skill-card sk-gray reveal" data-bang="BOING!">
+      <div class="skill-icon">🐹</div>
+      <div class="skill-name">Golang</div>
+      <div class="skill-desc">Goroutines, channels, gRPC microservices. Small, fast, impossible to catch — just like me.</div>
+      <div class="skill-bar-bg"><div class="skill-bar-fg" data-w="78"></div></div>
+      <div class="skill-pct">78%</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" class="projects-bg">
+  <div class="section-header reveal">
+    <div class="section-eyebrow">🧀 Portfolio</div>
+    <h2 class="section-title"><span class="blue">Featured</span> Projects</h2>
+    <p class="section-subtitle">Click ❤️ to collect · hover to see the escape plan!</p>
+  </div>
+
+  <div class="projects-grid">
+    <div class="project-card reveal">
+      <div class="proj-thumb" style="background:linear-gradient(135deg,#FFE0E0,#FFF5F5)">
+        <div class="stars-deco"></div>
+        <span class="proj-thumb-icon">⚡</span>
+        <div class="proj-ribbon">HOT!</div>
+        <button class="proj-like" onclick="likeProj(this,event)">🤍</button>
+      </div>
+      <div class="proj-body">
+        <div class="proj-tags"><span class="ptag t-red">PHP</span><span class="ptag t-blue">OpenSwoole</span><span class="ptag t-gray">Redis</span></div>
+        <div class="proj-title">SwiftSocket Server</div>
+        <p class="proj-desc">Real-time WebSocket server handling 50k concurrent connections with OpenSwoole coroutines & zero-downtime deploys.</p>
+        <div class="proj-footer"><span class="proj-stars">⭐ 1.2k</span><a href="#" class="proj-btn">View Code →</a></div>
+      </div>
+    </div>
+
+    <div class="project-card reveal" style="transition-delay:.1s">
+      <div class="proj-thumb" style="background:linear-gradient(135deg,#E0F0FF,#F0F8FF)">
+        <span class="proj-thumb-icon">🏪</span>
+        <div class="proj-ribbon">LIVE</div>
+        <button class="proj-like" onclick="likeProj(this,event)">🤍</button>
+      </div>
+      <div class="proj-body">
+        <div class="proj-tags"><span class="ptag t-blue">Next.js</span><span class="ptag t-green">Docker</span><span class="ptag t-gold">Stripe</span></div>
+        <div class="proj-title">Neko Commerce</div>
+        <p class="proj-desc">Full-stack e-commerce with SSR, real-time order tracking via WebSockets, and sub-100ms page loads.</p>
+        <div class="proj-footer"><span class="proj-stars">⭐ 876</span><a href="#" class="proj-btn">Live Demo →</a></div>
+      </div>
+    </div>
+
+    <div class="project-card reveal" style="transition-delay:.2s">
+      <div class="proj-thumb" style="background:linear-gradient(135deg,#E0FFE8,#F0FFF4)">
+        <span class="proj-thumb-icon">📊</span>
+        <div class="proj-ribbon" style="background:var(--green)">NEW</div>
+        <button class="proj-like" onclick="likeProj(this,event)">🤍</button>
+      </div>
+      <div class="proj-body">
+        <div class="proj-tags"><span class="ptag t-green">Golang</span><span class="ptag t-blue">gRPC</span><span class="ptag t-gray">K8s</span></div>
+        <div class="proj-title">Miku Monitor</div>
+        <p class="proj-desc">Distributed observability with gRPC microservices, Prometheus metrics & automated Grafana dashboards.</p>
+        <div class="proj-footer"><span class="proj-stars">⭐ 643</span><a href="#" class="proj-btn">View Code →</a></div>
+      </div>
+    </div>
+
+    <div class="project-card reveal" style="transition-delay:.3s">
+      <div class="proj-thumb" style="background:linear-gradient(135deg,#FFF5E0,#FFFAF0)">
+        <span class="proj-thumb-icon">💬</span>
+        <div class="proj-ribbon" style="background:var(--gold-d)">TOP</div>
+        <button class="proj-like" onclick="likeProj(this,event)">🤍</button>
+      </div>
+      <div class="proj-body">
+        <div class="proj-tags"><span class="ptag t-gold">OpenSwoole</span><span class="ptag t-blue">React</span><span class="ptag t-gray">E2E</span></div>
+        <div class="proj-title">ChatBurst</div>
+        <p class="proj-desc">E2E encrypted chat with sub-10ms message delivery via OpenSwoole WebSocket server magic.</p>
+        <div class="proj-footer"><span class="proj-stars">⭐ 2.1k</span><a href="#" class="proj-btn">View Code →</a></div>
+      </div>
+    </div>
+
+    <div class="project-card reveal" style="transition-delay:.4s">
+      <div class="proj-thumb" style="background:linear-gradient(135deg,#F0E8FF,#FAF5FF)">
+        <span class="proj-thumb-icon">🔐</span>
+        <div class="proj-ribbon" style="background:var(--blue)">AUTH</div>
+        <button class="proj-like" onclick="likeProj(this,event)">🤍</button>
+      </div>
+      <div class="proj-body">
+        <div class="proj-tags"><span class="ptag t-blue">Golang</span><span class="ptag t-red">OAuth2</span><span class="ptag t-green">JWT</span></div>
+        <div class="proj-title">ShadowAuth</div>
+        <p class="proj-desc">Drop-in auth microservice: OAuth2, OIDC, JWT rotation, RBAC, multi-tenant at 99.99% uptime.</p>
+        <div class="proj-footer"><span class="proj-stars">⭐ 890</span><a href="#" class="proj-btn">View Code →</a></div>
+      </div>
+    </div>
+
+    <div class="project-card reveal" style="transition-delay:.5s">
+      <div class="proj-thumb" style="background:linear-gradient(135deg,#FFE8CC,#FFF8EE)">
+        <span class="proj-thumb-icon">🎨</span>
+        <div class="proj-ribbon" style="background:var(--brown-l);color:white">ML</div>
+        <button class="proj-like" onclick="likeProj(this,event)">🤍</button>
+      </div>
+      <div class="proj-body">
+        <div class="proj-tags"><span class="ptag t-gold">PHP</span><span class="ptag t-red">Python</span><span class="ptag t-blue">React</span></div>
+        <div class="proj-title">AkiraMetrics</div>
+        <p class="proj-desc">Real-time analytics streaming millions of events/hr via async PHP, Python ML pipelines & live charts.</p>
+        <div class="proj-footer"><span class="proj-stars">⭐ 410</span><a href="#" class="proj-btn">Live Demo →</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience" class="exp-bg">
+  <div class="section-header reveal">
+    <div class="section-eyebrow">📜 History</div>
+    <h2 class="section-title">Work <span class="blue">History</span></h2>
+    <p class="section-subtitle">Click the icons — Jerry has something to say! 🐭</p>
+  </div>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot d-red" onclick="dotSmash(this,'🍳 BONK! Senior now!')">🏢</div>
+      <div class="tl-card">
+        <div class="tl-period">2023 — Present</div>
+        <div class="tl-role">Senior Backend Engineer</div>
+        <div class="tl-company">⚡ NexaCloud Technologies · Tokyo</div>
+        <p class="tl-desc">Architecting real-time infrastructure for 5M+ daily users. Led migration from PHP-FPM to OpenSwoole — cut server costs 60% while tripling throughput. Tom tried to stop me. He failed.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot d-gold" onclick="dotSmash(this,'🧀 Full stack cheese!')">🚀</div>
+      <div class="tl-card">
+        <div class="tl-period">2021 — 2023</div>
+        <div class="tl-role">Full-Stack Developer</div>
+        <div class="tl-company">🌸 SakuraLabs Inc. · Remote</div>
+        <p class="tl-desc">Built microservices in Golang and async PHP. Internal tooling reduced deploy time by 80%. Mentored 3 junior devs from rookies to full-stack rockstars.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot d-blue" onclick="dotSmash(this,'💡 Big brain moment!')">💡</div>
+      <div class="tl-card">
+        <div class="tl-period">2019 — 2021</div>
+        <div class="tl-role">Software Engineer</div>
+        <div class="tl-company">🎮 PixelForge Studios · Osaka</div>
+        <p class="tl-desc">Backend APIs for mobile games with 10M+ installs. Redis caching + MySQL optimization → handled 200k RPM. Outsmarted every performance bottleneck.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot d-green" onclick="dotSmash(this,'🎓 Graduated! Tom is confused!')">🎓</div>
+      <div class="tl-card">
+        <div class="tl-period">2015 — 2019</div>
+        <div class="tl-role">B.Sc. Computer Science</div>
+        <div class="tl-company">🏛 University of Tokyo</div>
+        <p class="tl-desc">Graduated with honors. Thesis on distributed systems & async I/O patterns. Active in competitive programming club. Also got chased a lot for stress training.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="contact-bg">
+  <div class="contact-inner">
+    <div class="reveal">
+      <h2 class="contact-title">Let's catch something<br>AWESOME together! 🐭🧀</h2>
+      <p class="contact-subtitle">
+        Need a blazing backend, real-time magic, or someone to geek out over OpenSwoole? I'm faster than Tom and twice as clever!
+      </p>
+
+      <div class="contact-links">
+        <a href="mailto:jerry@dev.io" class="contact-link" onclick="speak('📧 Email sent! 🐭')">📧 jerry@dev.io</a>
+        <a href="#" class="contact-link" onclick="speak('🐙 GitHub opened!')">🐙 GitHub</a>
+        <a href="#" class="contact-link" onclick="speak('💼 LinkedIn! Fancy!')">💼 LinkedIn</a>
+        <a href="#" class="contact-link" onclick="speak('🐦 Twitter! Chirp!')">🐦 Twitter</a>
+        <a href="#" class="contact-link" onclick="speak('📄 Downloading CV!')">📄 Download CV</a>
+      </div>
+
+      <!-- Mini game -->
+      <div class="mini-game-box">
+        <div class="mg-title">🐭 Chase Game — Click the cheese before Tom grabs it!</div>
+        <div class="mg-sub">Move your mouse over Jerry · click the cheese to score!</div>
+        <div class="mg-scene" id="mgScene">
+          <div class="mg-jerry" id="mgJerry">🐭</div>
+          <div class="mg-cheese" id="mgCheese">🧀</div>
+        </div>
+        <div class="mg-score-row">
+          <span>Score: <span class="mg-score" id="mgScore">0</span></span>
+          <span class="mg-rank" id="mgRank">🐭 Start running!</span>
+          <button class="mg-btn" id="mgReset">↺ Reset</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>🐭 Jerry.dev — Made with 🧀 cheese & code · Hanna-Barbera style · 2025 🐱</footer>
+
+<button id="scrollTop">↑</button>
+
+<script>
+/* ── Cursor ── */
+const cursorEl = document.getElementById('tom-cursor');
+let cx=0,cy=0,tx=0,ty=0;
+document.addEventListener('mousemove', e => { tx=e.clientX; ty=e.clientY; });
+(function loop(){ cx+=(tx-cx)*.16; cy+=(ty-cy)*.16; cursorEl.style.left=cx+'px'; cursorEl.style.top=cy+'px'; requestAnimationFrame(loop); })();
+
+document.addEventListener('mousedown', () => cursorEl.classList.add('grabbing'));
+document.addEventListener('mouseup',   () => cursorEl.classList.remove('grabbing'));
+
+// Cheese trail
+document.addEventListener('mousemove', e => {
+  if(Math.random()<.06){
+    const c=document.createElement('div');
+    c.classList.add('cheese-particle');
+    c.textContent='🧀';
+    c.style.left=e.clientX-12+'px'; c.style.top=e.clientY-12+'px';
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),1300);
+  }
+});
+
+/* ── Speech bubble ── */
+const sb = document.getElementById('speech-bubble');
+let sbTimer;
+function speak(msg){
+  sb.textContent=msg; sb.classList.add('show');
+  clearTimeout(sbTimer);
+  sbTimer=setTimeout(()=>sb.classList.remove('show'),2400);
+  return false;
+}
+
+/* ── Bang effect ── */
+function bang(x, y, word){
+  const b=document.createElement('div');
+  b.classList.add('bang'); b.textContent=word;
+  b.style.left=x-40+'px'; b.style.top=y-30+'px';
+  document.body.appendChild(b);
+  setTimeout(()=>b.remove(),500);
+}
+
+/* ── Confetti ── */
+const cColors=['#F5C842','#E8341A','#2E86AB','#4CAF50','#C4893A','#FFFFFF'];
+function confetti(x,y,n=14){
+  for(let i=0;i<n;i++){
+    const d=document.createElement('div');
+    d.style.cssText=`
+      position:fixed;left:${x+(Math.random()-.5)*80}px;top:${y}px;
+      width:${7+Math.random()*8}px;height:${7+Math.random()*8}px;
+      background:${cColors[i%cColors.length]};
+      border:1.5px solid #1A1A1A; border-radius:${Math.random()>.5?'50%':'3px'};
+      z-index:9990; pointer-events:none;
+      animation:confettiFall ${1.4+Math.random()*.8}s ease-in forwards;
+      animation-delay:${Math.random()*.3}s;
+    `;
+    document.body.appendChild(d);
+    setTimeout(()=>d.remove(),2500);
+  }
+}
+
+/* Inject keyframe */
+const style=document.createElement('style');
+style.textContent=`@keyframes confettiFall{0%{opacity:1;transform:translateY(0) rotate(0deg)}100%{opacity:0;transform:translateY(80vh) rotate(540deg)}}`;
+document.head.appendChild(style);
+
+/* ── Marquee ── */
+const tags=['OpenSwoole','Async PHP','React · Next.js','Docker · K8s','Redis','WebSocket','Golang','PostgreSQL','Node.js','REST APIs','GraphQL','Microservices'];
+const mEl=document.getElementById('marquee');
+[...tags,...tags].forEach(t=>{
+  const d=document.createElement('div'); d.className='m-item'; d.textContent=t; mEl.appendChild(d);
+});
+
+/* ── Stat counters ── */
+const statObs=new IntersectionObserver(entries=>{
+  entries.forEach(en=>{
+    if(!en.isIntersecting) return;
+    en.target.querySelectorAll('[data-target]').forEach(el=>{
+      const target=+el.dataset.target;
+      let start=null;
+      const step=ts=>{
+        if(!start)start=ts;
+        const p=Math.min((ts-start)/2000,1);
+        const v=Math.floor((1-Math.pow(1-p,3))*target);
+        el.textContent = target>=1000000 ? (v/1000000).toFixed(1)+'M' : target>999 ? v.toLocaleString() : v;
+        if(p<1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    });
+    statObs.unobserve(en.target);
+  });
+},{threshold:.3});
+document.querySelectorAll('.stats-bar').forEach(el=>statObs.observe(el));
+
+/* ── Reveal ── */
+const revObs=new IntersectionObserver(entries=>{
+  entries.forEach(en=>{
+    if(!en.isIntersecting) return;
+    en.target.classList.add('visible');
+    en.target.querySelectorAll('.skill-bar-fg').forEach(b=>{
+      setTimeout(()=>{ b.style.width=b.dataset.w+'%'; },200);
+    });
+  });
+},{threshold:.1});
+document.querySelectorAll('.reveal,.tl-item').forEach(el=>revObs.observe(el));
+
+/* ── Skill cards ── */
+document.querySelectorAll('.skill-card').forEach(card=>{
+  card.addEventListener('click',e=>{
+    const word=card.dataset.bang||'POW!';
+    bang(e.clientX,e.clientY,word);
+    confetti(e.clientX,e.clientY,10);
+    speak(['🐭 Jerry wins!','🧀 Cheese power!','⚡ Too fast for Tom!','💡 Big brain!'][Math.floor(Math.random()*4)]);
+    // Ripple
+    const r=document.createElement('div'); r.classList.add('ripple');
+    const rect=card.getBoundingClientRect();
+    const sz=Math.max(rect.width,rect.height)*2;
+    r.style.cssText=`width:${sz}px;height:${sz}px;left:${e.clientX-rect.left-sz/2}px;top:${e.clientY-rect.top-sz/2}px`;
+    card.appendChild(r); setTimeout(()=>r.remove(),700);
+  });
+});
+
+/* ── Project like ── */
+function likeProj(btn,e){
+  e.stopPropagation();
+  btn.classList.toggle('liked');
+  btn.textContent=btn.classList.contains('liked')?'❤️':'🤍';
+  if(btn.classList.contains('liked')){
+    confetti(e.clientX,e.clientY,14);
+    bang(e.clientX,e.clientY,'LOVE!');
+    speak('❤️ Added to favorites!');
+  }
+}
+
+/* ── Timeline dots ── */
+function dotSmash(el,msg){
+  bang(el.getBoundingClientRect().left+40, el.getBoundingClientRect().top+40, 'POW!');
+  confetti(el.getBoundingClientRect().left+40, el.getBoundingClientRect().top, 10);
+  speak(msg);
+  el.style.transform='scale(1.4) rotate(15deg)';
+  setTimeout(()=>el.style.transform='',350);
+}
+
+/* ── Frying pan ── */
+document.getElementById('panBtn')?.addEventListener('click',e=>{
+  bang(e.clientX,e.clientY,'BONK!');
+  confetti(e.clientX,e.clientY,18);
+  speak('🍳 BONK! Tom got hit!');
+  // Make Jerry react
+  const mouth=document.getElementById('jerryMouth');
+  if(mouth){ mouth.setAttribute('d','M112 128 Q130 116 148 128'); setTimeout(()=>mouth.setAttribute('d','M112 130 Q130 144 148 130'),800); }
+});
+
+/* ── Cheese wheel ── */
+document.getElementById('cheeseBtn')?.addEventListener('click',e=>{
+  confetti(e.clientX,e.clientY,20);
+  bang(e.clientX,e.clientY,'YUM!');
+  speak('🧀 Delicious cheese!');
+  // Shower cheese
+  for(let i=0;i<12;i++){
+    const c=document.createElement('div'); c.classList.add('cheese-particle');
+    c.textContent='🧀'; c.style.left=(e.clientX+(Math.random()-.5)*120)+'px'; c.style.top=e.clientY+'px';
+    c.style.animationDelay=Math.random()*.5+'s';
+    document.body.appendChild(c); setTimeout(()=>c.remove(),1500);
+  }
+});
+
+/* ── Hero buttons ── */
+document.getElementById('heroWork')?.addEventListener('click',e=>{ confetti(e.clientX,e.clientY,16); bang(e.clientX,e.clientY,'GO!'); });
+document.getElementById('heroHi')  ?.addEventListener('click',e=>{ confetti(e.clientX,e.clientY,16); speak('🐭 Hehe! Hello!'); });
+
+/* ── Nav active ── */
+const secs=['about','skills','projects','experience','contact'];
+const navLinks=document.querySelectorAll('.nav-link');
+window.addEventListener('scroll',()=>{
+  let cur=secs[0];
+  secs.forEach(id=>{ const el=document.getElementById(id); if(el&&window.scrollY>=el.offsetTop-200)cur=id; });
+  navLinks.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+cur));
+  document.getElementById('scrollTop').classList.toggle('vis',window.scrollY>400);
+});
+
+/* ── Smooth scroll ── */
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    const t=document.querySelector(a.getAttribute('href'));
+    if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth',block:'start'}); }
+  });
+});
+
+/* ═══ MINI CHASE GAME ═══ */
+let gameScore=0;
+const jerry=document.getElementById('mgJerry');
+const cheese=document.getElementById('mgCheese');
+const scoreEl=document.getElementById('mgScore');
+const rankEl=document.getElementById('mgRank');
+const scene=document.getElementById('mgScene');
+
+function placeItem(el, minX=10, maxX=80, y=38){
+  el.style.left=minX+Math.random()*(maxX-minX)+'%';
+}
+
+// Jerry follows cursor within scene
+scene.addEventListener('mousemove',e=>{
+  const r=scene.getBoundingClientRect();
+  const pct=((e.clientX-r.left)/r.width*100);
+  jerry.style.left=Math.max(2,Math.min(90,pct-3))+'%';
+  // Flip direction
+  jerry.style.transform=e.movementX<0?'scaleX(-1)':'scaleX(1)';
+});
+
+cheese.addEventListener('click',e=>{
+  e.stopPropagation();
+  gameScore++;
+  scoreEl.textContent=gameScore;
+  rankEl.textContent=gameScore>=30?'🏆 Legendary!':gameScore>=20?'🥇 Expert!':gameScore>=10?'🥈 Pro!':gameScore>=5?'🥉 Good!':'🐭 Keep running!';
+  confetti(e.clientX,e.clientY,8);
+  if(gameScore%5===0) bang(e.clientX,e.clientY,['YUM!','GOT IT!','NICE!'][gameScore%3]);
+  speak(['🧀 Got the cheese!','⚡ Too fast for Tom!','🎉 Nice catch!'][gameScore%3]);
+  // Move cheese to new position
+  cheese.style.transition='left .3s ease';
+  placeItem(cheese,5,85);
+  setTimeout(()=>cheese.style.transition='',400);
+});
+
+// Auto-move cheese occasionally (Tom is trying to take it)
+setInterval(()=>{
+  if(Math.random()<.3){
+    cheese.style.transition='left .8s ease';
+    placeItem(cheese,5,85);
+    setTimeout(()=>cheese.style.transition='',900);
+  }
+},2500);
+
+document.getElementById('mgReset')?.addEventListener('click',()=>{
+  gameScore=0; scoreEl.textContent='0'; rankEl.textContent='🐭 Start running!';
+  placeItem(cheese,5,85); placeItem(jerry,10,40);
+});
+
+// init
+placeItem(cheese,50,80); placeItem(jerry,10,30);
+
+/* ── Welcome ── */
+setTimeout(()=>{ speak('🐭 Welcome! Hehe — Tom can\'t catch me!'); confetti(window.innerWidth/2,60,20); },700);
+
+/* ── Konami ── */
+let ki=0; const km=['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+document.addEventListener('keydown',e=>{
+  if(e.key===km[ki])ki++; else ki=0;
+  if(ki===km.length){ ki=0; speak('🎮 Konami! Tom is FURIOUS! 🍳'); for(let i=0;i<50;i++) setTimeout(()=>confetti(Math.random()*window.innerWidth,Math.random()*300,6),i*50); }
+});
+</script>
+</body>
+</html>
